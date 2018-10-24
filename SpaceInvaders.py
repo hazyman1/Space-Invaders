@@ -33,6 +33,10 @@ backgroundImg = pygame.image.load("si-background.gif")
 enemyImg = pygame.image.load("si-enemy.gif")
 bulletImg = pygame.image.load("si-bullet.gif")
 
+laserSound = pygame.mixer.Sound('laser.wav')
+explosionSound = pygame.mixer.Sound('explode.wav')
+voltageSound = pygame.mixer.Sound('voltage.wav')
+
 def isCollision(a, b):
     return a.xcor + a.width > b.xcor and a.xcor < b.xcor + b.width \
     and a.ycor + a.height > b.ycor and a.ycor < b.ycor + b.height
@@ -132,6 +136,7 @@ while player.isAlive:
             elif event.key == pygame.K_RIGHT:
                 player.moveRight()
             elif event.key == pygame.K_SPACE:
+                laserSound.play()
                 newBullet = Bullet(player.xcor + player.width / 2 - bulletImg.get_width() / 2, player.ycor, bulletImg, 10)
                 bullets.append(newBullet)
 
@@ -164,6 +169,7 @@ while player.isAlive:
             if isCollision(enemy, bullet):
                 try:
                     enemies.remove(enemy)
+                    explosionSound.play()
                     player.score += pointsPerEnemy
                 except ValueError:
                     pass
